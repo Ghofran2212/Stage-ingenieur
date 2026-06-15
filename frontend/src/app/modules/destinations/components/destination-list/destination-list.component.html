@@ -1,0 +1,135 @@
+<div class="page-header">
+  <div class="container">
+    <h1>🌍 Destinations Tunisie</h1>
+    <p>Découvrez les plus beaux endroits de Tunisie</p>
+  </div>
+</div>
+
+<div class="container py-4">
+
+  <div class="alert-success-custom" *ngIf="successMsg">✅ {{ successMsg }}</div>
+  <div class="alert-error-custom" *ngIf="errorMsg">❌ {{ errorMsg }}</div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+        placeholder="Rechercher..."
+        class="search-input">
+    </div>
+
+    <select
+      [(ngModel)]="selectedRegion"
+      (ngModelChange)="applyFilters()"
+      class="filter-select">
+      <option value="">Toutes les régions</option>
+      <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+    </select>
+
+    <select
+      [(ngModel)]="selectedCategorie"
+      (ngModelChange)="applyFilters()"
+      class="filter-select">
+      <option value="">Toutes les catégories</option>
+      <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+    </select>
+
+    <button
+      class="btn-reset"
+      (click)="resetFilters()"
+      *ngIf="searchTerm || selectedRegion || selectedCategorie">
+      Réinitialiser
+    </button>
+
+    <button
+      class="btn-add"
+      *ngIf="isAdmin"
+      routerLink="/destinations/admin/new">
+      Ajouter
+    </button>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    Chargement...
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && filtered.length === 0">
+    <h3>Aucune destination trouvée</h3>
+  </div>
+
+  <div class="destinations-grid" *ngIf="!loading && filtered.length > 0">
+
+    <div class="dest-card" *ngFor="let dest of filtered">
+
+      <div class="dest-img" (click)="goToDetail(dest.id!)">
+        <img
+          [src]="dest.imageUrl"
+          [alt]="dest.nom">
+      </div>
+
+      <div class="dest-body">
+
+        <div class="dest-region">
+          {{ dest.region }}
+        </div>
+
+        <h3 class="dest-name" (click)="goToDetail(dest.id!)">
+          {{ dest.nom }}
+        </h3>
+
+        <p class="dest-desc">
+          {{ dest.description.slice(0,90) }}
+          {{ dest.description.length > 90 ? '...' : '' }}
+        </p>
+
+        <div class="dest-footer">
+
+          <div class="dest-price">
+            {{ dest.prix }} TND
+          </div>
+
+          <div class="dest-actions">
+
+            <button
+              *ngIf="isLoggedIn && !isAdmin"
+              class="btn-reserve"
+              (click)="goToReserve(dest.id!)">
+              Réserver
+            </button>
+
+            <button
+              *ngIf="!isLoggedIn"
+              routerLink="/auth/login">
+              Connexion
+            </button>
+
+            <ng-container *ngIf="isAdmin">
+
+              <button
+                class="btn-edit"
+                (click)="goToEdit(dest.id!)">
+                Modifier
+              </button>
+
+              <button
+                class="btn-delete"
+                (click)="confirmDelete(dest.id!)">
+                Supprimer
+              </button>
+
+            </ng-container>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

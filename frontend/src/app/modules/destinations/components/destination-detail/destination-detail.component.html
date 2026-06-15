@@ -1,0 +1,36 @@
+<div class="container py-4">
+  <button class="btn-back" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Retour
+  </button>
+
+  <div class="loading-container" *ngIf="loading"><div class="spinner-border"></div></div>
+  <div class="alert-error-custom" *ngIf="error">❌ {{ error }}</div>
+
+  <div class="detail-card" *ngIf="destination">
+    <div class="detail-img">
+      <img [src]="destination.imageUrl || 'https://via.placeholder.com/800x400?text=Tunisie'"
+           [alt]="destination.nom"
+           onerror="this.src='https://via.placeholder.com/800x400?text=Tunisie'"/>
+      <div class="detail-badge">{{ destination.categorie }}</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-meta">
+        <span class="meta-region"><i class="fas fa-map-marker-alt"></i> {{ destination.region }}</span>
+        <span class="meta-price">{{ destination.prix | number }} TND <small>/ pers.</small></span>
+      </div>
+      <h1>{{ destination.nom }}</h1>
+      <p class="detail-desc">{{ destination.description }}</p>
+      <div class="detail-actions">
+        <button class="btn-reserve-big"
+                *ngIf="authService.isLoggedIn && !authService.isAdmin"
+                (click)="reserve()">
+          <i class="fas fa-calendar-plus"></i> Réserver maintenant
+        </button>
+        <a routerLink="/auth/login" class="btn-login-hint"
+           *ngIf="!authService.isLoggedIn">
+          Connectez-vous pour réserver
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

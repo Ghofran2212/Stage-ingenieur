@@ -1,0 +1,50 @@
+<div class="register-page">
+
+  <div class="register-card">
+
+    <h2>Créer un compte</h2>
+
+    <form (ngSubmit)="register()">
+
+      <input
+        type="text"
+        placeholder="Nom"
+        [(ngModel)]="registerData.nom"
+        name="nom">
+
+      <input
+        type="text"
+        placeholder="Prénom"
+        [(ngModel)]="registerData.prenom"
+        name="prenom">
+
+      <input
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="registerData.email"
+        name="email">
+
+      <input
+        type="password"
+        placeholder="Mot de passe"
+        [(ngModel)]="registerData.password"
+        name="password">
+
+      <select
+        [(ngModel)]="registerData.role"
+        name="role">
+
+        <option value="TOURISTE">Touriste</option>
+        <option value="ADMIN">Administrateur</option>
+
+      </select>
+
+      <button type="submit">
+        S'inscrire
+      </button>
+
+    </form>
+
+  </div>
+
+</div>

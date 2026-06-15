@@ -1,0 +1,256 @@
+<div class="admin-wrapper">
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      ⚙️ Admin Panel
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <a routerLink="/admin/dashboard" routerLinkActive="active">
+        <i class="fas fa-tachometer-alt"></i>
+        Dashboard
+      </a>
+
+      <a routerLink="/destinations" routerLinkActive="active">
+        <i class="fas fa-map-marked-alt"></i>
+        Destinations
+      </a>
+
+      <a routerLink="/admin/reservations" routerLinkActive="active">
+        <i class="fas fa-calendar-check"></i>
+        Réservations
+      </a>
+
+      <!-- AJOUT MENU HOTELS -->
+      <a routerLink="/admin/hotels" routerLinkActive="active">
+        <i class="fas fa-hotel"></i>
+        Hôtels
+      </a>
+
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">👤</div>
+
+      <div>
+        <div class="user-name">
+          {{ authService.currentUser?.prenom }}
+          {{ authService.currentUser?.nom }}
+        </div>
+
+        <div class="user-role">
+          Administrateur
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="admin-header">
+
+      <div>
+        <h1>Tableau de bord</h1>
+        <p>Vue d'ensemble de TourismeTN</p>
+      </div>
+
+      <a routerLink="/destinations/admin/new" class="btn-new-dest">
+        <i class="fas fa-plus"></i>
+        Nouvelle destination
+      </a>
+
+    </div>
+
+    <div class="loading-container" *ngIf="loading">
+      <div class="spinner-border"></div>
+    </div>
+
+    <ng-container *ngIf="!loading">
+
+      <div class="stats-grid">
+
+        <div class="stat-card blue">
+          <div class="stat-icon">🗺️</div>
+          <div class="stat-info">
+            <div class="stat-num">{{ stats.totalDestinations }}</div>
+            <div class="stat-label">Destinations</div>
+          </div>
+        </div>
+
+        <div class="stat-card orange">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <div class="stat-num">{{ stats.totalReservations }}</div>
+            <div class="stat-label">Réservations</div>
+          </div>
+        </div>
+
+        <div class="stat-card green">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <div class="stat-num">{{ stats.confirmeesCount }}</div>
+            <div class="stat-label">Confirmées</div>
+          </div>
+        </div>
+
+        <div class="stat-card purple">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <div class="stat-num">{{ stats.totalTouristes }}</div>
+            <div class="stat-label">Touristes uniques</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mini-stats">
+
+        <div class="mini-stat yellow">
+          <span class="mini-num">{{ stats.enAttenteCount }}</span>
+          <span class="mini-label">⏳ En attente</span>
+        </div>
+
+        <div class="mini-stat red">
+          <span class="mini-num">{{ stats.annuleesCount }}</span>
+          <span class="mini-label">❌ Annulées</span>
+        </div>
+
+        <div class="mini-stat teal">
+          <span class="mini-num">{{ stats.confirmeesCount }}</span>
+          <span class="mini-label">✅ Confirmées</span>
+        </div>
+
+      </div>
+
+      <div class="section-card">
+
+        <div class="section-header">
+          <h2>Réservations récentes</h2>
+
+          <a routerLink="/admin/reservations" class="see-all">
+            Voir tout →
+          </a>
+        </div>
+
+        <div class="empty-state" *ngIf="recentReservations.length === 0">
+          <p>Aucune réservation pour le moment.</p>
+        </div>
+
+        <div
+          class="table-responsive"
+          *ngIf="recentReservations.length > 0">
+
+          <table class="resa-table">
+
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Destination</th>
+                <th>Touriste</th>
+                <th>Arrivée</th>
+                <th>Départ</th>
+                <th>Pers.</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let r of recentReservations">
+
+                <td class="resa-id">
+                  #{{ r.id }}
+                </td>
+
+                <td>
+                  <strong>{{ r.destinationNom }}</strong>
+                </td>
+
+                <td>
+                  {{ r.userEmail }}
+                </td>
+
+                <td>
+                  {{ r.dateDebut | date:'dd/MM/yy' }}
+                </td>
+
+                <td>
+                  {{ r.dateFin | date:'dd/MM/yy' }}
+                </td>
+
+                <td>
+                  {{ r.nombrePersonnes }}
+                </td>
+
+                <td>
+                  <span
+                    class="statut-badge"
+                    [ngClass]="getStatutClass(r.statut)">
+
+                    {{ getStatutLabel(r.statut) }}
+
+                  </span>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="quick-actions">
+
+        <h2>Actions rapides</h2>
+
+        <div class="actions-grid">
+
+          <a
+            routerLink="/destinations/admin/new"
+            class="action-btn">
+
+            <span class="action-icon">➕</span>
+            <span>Ajouter destination</span>
+
+          </a>
+
+          <a
+            routerLink="/admin/reservations"
+            class="action-btn">
+
+            <span class="action-icon">📋</span>
+            <span>Gérer réservations</span>
+
+          </a>
+
+          <a
+            routerLink="/admin/hotels"
+            class="action-btn">
+
+            <span class="action-icon">🏨</span>
+            <span>Gérer hôtels</span>
+
+          </a>
+
+          <a
+            routerLink="/destinations"
+            class="action-btn">
+
+            <span class="action-icon">🌍</span>
+            <span>Voir destinations</span>
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </main>
+</div>

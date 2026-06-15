@@ -1,0 +1,85 @@
+
+<div class="container">
+
+  <h2>Gestion des Hôtels</h2>
+
+  <div class="card p-3 mb-4">
+
+    <input
+      class="form-control mb-2"
+      placeholder="Nom hôtel"
+      [(ngModel)]="hotel.nom">
+
+    <input
+      class="form-control mb-2"
+      type="number"
+      placeholder="Étoiles"
+      [(ngModel)]="hotel.etoiles">
+
+    <input
+      class="form-control mb-2"
+      type="number"
+      placeholder="Prix"
+      [(ngModel)]="hotel.prixParNuit">
+
+    <input
+      class="form-control mb-2"
+      placeholder="Image URL"
+      [(ngModel)]="hotel.imageUrl">
+
+    <select
+      class="form-control mb-2"
+      [(ngModel)]="hotel.destinationId">
+
+      <option [value]="0">
+        Choisir destination
+      </option>
+
+      <option
+        *ngFor="let d of destinations"
+        [value]="d.id">
+
+        {{ d.nom }}
+
+      </option>
+
+    </select>
+
+    <button
+      class="btn btn-success"
+      (click)="save()">
+
+      Ajouter Hôtel
+
+    </button>
+
+  </div>
+
+  <table class="table table-bordered">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Étoiles</th>
+        <th>Prix</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let h of hotels">
+
+        <td>{{ h.id }}</td>
+        <td>{{ h.nom }}</td>
+        <td>{{ h.etoiles }}</td>
+        <td>{{ h.prixParNuit }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+```

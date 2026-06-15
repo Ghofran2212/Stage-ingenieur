@@ -1,0 +1,102 @@
+<div class="page-header">
+  <div class="container">
+    <h1>{{ isEditMode ? '✏️ Modifier' : '➕ Ajouter' }} une destination</h1>
+    <p>{{ isEditMode ? 'Mettre à jour les informations' : 'Créer une nouvelle destination' }}</p>
+  </div>
+</div>
+
+<div class="container py-4">
+  <div class="form-card">
+
+    <div class="loading-container" *ngIf="loading">
+      <div class="spinner-border"></div>
+    </div>
+
+    <div class="alert-error-custom" *ngIf="error">❌ {{ error }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!loading">
+      <div class="form-grid">
+
+        <div class="form-col">
+          <div class="form-group">
+            <label class="form-label">Nom <span class="req">*</span></label>
+            <input type="text" formControlName="nom" class="form-control"
+              [class.is-invalid]="nom.invalid && nom.touched" placeholder="Ex: Sidi Bou Saïd"/>
+            <div class="err" *ngIf="nom.invalid && nom.touched">
+              <span *ngIf="nom.errors?.['required']">Nom requis.</span>
+              <span *ngIf="nom.errors?.['minlength']">Min 2 caractères.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Région <span class="req">*</span></label>
+            <select formControlName="region" class="form-control"
+              [class.is-invalid]="region.invalid && region.touched">
+              <option value="">-- Sélectionner --</option>
+              <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+            </select>
+            <div class="err" *ngIf="region.invalid && region.touched">Région requise.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Catégorie <span class="req">*</span></label>
+            <select formControlName="categorie" class="form-control"
+              [class.is-invalid]="categorie.invalid && categorie.touched">
+              <option value="">-- Sélectionner --</option>
+              <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+            </select>
+            <div class="err" *ngIf="categorie.invalid && categorie.touched">Catégorie requise.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Prix / personne (TND) <span class="req">*</span></label>
+            <input type="number" formControlName="prix" class="form-control"
+              [class.is-invalid]="prix.invalid && prix.touched" placeholder="150" min="0"/>
+            <div class="err" *ngIf="prix.invalid && prix.touched">
+              <span *ngIf="prix.errors?.['required']">Prix requis.</span>
+              <span *ngIf="prix.errors?.['min']">Prix doit être positif.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-col">
+          <div class="form-group">
+            <label class="form-label">Description <span class="req">*</span></label>
+            <textarea formControlName="description" class="form-control textarea"
+              [class.is-invalid]="description.invalid && description.touched"
+              placeholder="Décrivez cette destination..." rows="4"></textarea>
+            <div class="err" *ngIf="description.invalid && description.touched">
+              <span *ngIf="description.errors?.['required']">Description requise.</span>
+              <span *ngIf="description.errors?.['minlength']">Min 10 caractères.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">URL Image <span class="req">*</span></label>
+            <input type="url" formControlName="imageUrl" class="form-control"
+              [class.is-invalid]="imageUrl.invalid && imageUrl.touched"
+              (input)="onImageUrlChange()"
+              placeholder="https://exemple.com/image.jpg"/>
+            <div class="err" *ngIf="imageUrl.invalid && imageUrl.touched">URL image requise.</div>
+          </div>
+
+          <div class="image-preview" *ngIf="imagePreview">
+            <label class="form-label">Aperçu</label>
+            <img [src]="imagePreview" alt="Aperçu"
+                 onerror="this.style.display='none'"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="cancel()">
+          <i class="fas fa-arrow-left"></i> Annuler
+        </button>
+        <button type="submit" class="btn-save" [disabled]="form.invalid || saving">
+          <span *ngIf="!saving"><i class="fas fa-save"></i> {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}</span>
+          <span *ngIf="saving"><span class="spin"></span> Sauvegarde...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

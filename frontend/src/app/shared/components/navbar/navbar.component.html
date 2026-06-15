@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <div class="logo">
+    🌍 Tourism App
+  </div>
+
+  <ul class="nav-links">
+    <li><a routerLink="/destinations">Destinations</a></li>
+    <li><a routerLink="/reservations">Réservations</a></li>
+  </ul>
+
+  <div class="user-section">
+    <span>👤 {{ authService.currentUser?.prenom }}</span>
+    <button (click)="logout()">Déconnexion</button>
+  </div>
+  <li>
+  <a routerLink="/chatbot">
+    Chatbot
+  </a>
+</li>
+  
+</nav>
