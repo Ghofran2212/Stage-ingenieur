@@ -1,0 +1,46 @@
+services:
+  angular-app:
+    image: angular-app
+    container_name: angular
+    ports:
+      - "4200:80"
+    depends_on:
+      - spring-app
+
+  spring-app:
+    image: spring-app
+    container_name: spring
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/tourisme_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - JWT_SECRET=stageEteSecretKey2024EspritTunisie123456
+      - JWT_EXPIRATION=86400000
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: tourisme_db
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - demo:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  demo:
