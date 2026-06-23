@@ -15,12 +15,12 @@ pipeline {
         
       
       }
-      stage("build image backend"){
-        steps{
-          dir ("Stage-ingenieur/backend"){
-           sh "mvn clean package"
-           sh "docker build -t ghofran/spring-app . "
-           docker push ghofran/spring-app
+    stage('Build Image Backend') {
+    steps {
+        dir('Stage-ingenieur/backend') {
+            sh 'mvn clean package'
+            sh 'docker build -t ghofran/spring-app .'
+            sh 'docker push ghofran/spring-app'
         }
       }
     }
