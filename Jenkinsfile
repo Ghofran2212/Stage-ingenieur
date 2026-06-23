@@ -16,21 +16,19 @@ pipeline {
         sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
       }
     }
-    stage("Login to docker hub"){
-      steps{
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'docker-hub-cred',
-            usernameVariable: 'DOCKERHUB_USERNAME',
-            passwordVariable: 'DOCKERHUB_TOKEN'
-          )
-        ]) {
-          sh '''echo $DOCKERHUB_TOKEN | docker login \
-              -u $DOCKERHUB_USERNAME \
-              --password-stdin '''
-        }
-      }
+   stage("Login to docker hub") {
+  steps {
+    withCredentials([
+      usernamePassword(
+        credentialsId: 'docker-hub-cred',       
+        usernameVariable: 'DOCKERHUB_USERNAME',
+        passwordVariable: 'DOCKERHUB_TOKEN'
+      )
+    ]) {
+      sh 'echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin'
     }
+  }
+}
 
     stage('Build Image Backend') {
       steps {
