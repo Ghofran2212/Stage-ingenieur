@@ -17,19 +17,33 @@ pipeline {
       }
     }
 
+    stage("Login to Docker Hub") {
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: 'docker-hub-cred',
+          usernameVariable: 'DOCKERHUB_USERNAME',
+          passwordVariable: 'DOCKERHUB_TOKEN'
+        )]) {
+          sh 'echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+        }
+      }
+    }
+
     stage('Build & Push Backend') {
       steps {
         dir('Stage-ingenieur/backend') {
           sh 'mvn clean package -DskipTests'
           sh 'docker build -t ghofranhajjej/spring-app .'
-          withCredentials([usernamePassword(
-            credentialsId: 'docker-hub-cred',
-            usernameVariable: 'DOCKERHUB_USERNAME',
-            passwordVariable: 'DOCKERHUB_TOKEN'
-          )]) {
-            sh 'echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin'
-            sh 'docker push ghofranhajjej/spring-app'
-          }
+          sh 'docker push ghofranhajjej/spring-app'
+        }
+      }
+    }
+
+    stage('Build & Push Frontend') {
+      steps {
+        dir('Stage-ingenieur/frontend') {
+          sh 'docker build -t ghofranhajjej/angular-app . --no-cache'
+          sh 'docker push ghofranhajjej/angular-app'
         }
       }
     }
