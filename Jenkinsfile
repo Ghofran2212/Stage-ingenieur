@@ -15,13 +15,13 @@ pipeline {
       steps {
         sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
       }
-    }                          // ← } manquant ajouté ici
+    }                          
 
     stage('Build Image Backend') {
       steps {
         dir('Stage-ingenieur/backend') {
           sh 'mvn clean package'
-          sh 'docker build -t ghofran/spring-app .'
+          sh 'docker build -t ghofran/spring-app . --no-cache'
           sh 'docker push ghofran/spring-app'
         }
       }
