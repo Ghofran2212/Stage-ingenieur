@@ -1,29 +1,28 @@
 pipeline {
+  agent any
+  stages {
 
-  agent any 
-  stages{
-    stage("clean up"){
-      steps{
+    stage("clean up") {
+      steps {
         deleteDir()
       }
-
     }
-    stage("clone code"){
-      steps{
-        sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
 
-        
-      
+    stage("clone code") {
+      steps {
+        sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
       }
+    }                          // ← } manquant ajouté ici
+
     stage('Build Image Backend') {
-    steps {
+      steps {
         dir('Stage-ingenieur/backend') {
-            sh 'mvn clean package'
-            sh 'docker build -t ghofran/spring-app .'
-            sh 'docker push ghofran/spring-app'
+          sh 'mvn clean package'
+          sh 'docker build -t ghofran/spring-app .'
+          sh 'docker push ghofran/spring-app'
         }
       }
     }
-  }
 
+  }
 }
