@@ -52,13 +52,13 @@ pipeline {
         }
       }
     }
-    stage("docker compose for production") {
+   stage("docker compose for production") {
   steps {
     dir("Stage-ingenieur") {
-      sh "docker-compose up -d"
+      sh "docker compose down -v --remove-orphans || true"
+      sh "docker compose up -d"
     }
   }
 }
-
   }
 }
