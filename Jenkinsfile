@@ -47,6 +47,14 @@ pipeline {
         }
       }
     }
+      stage("docker compose for production"){
+      steps{
+        dir("formation_devops"){
+          sh "docker compose down --volumes"
+          sh "docker compose up -d "
+        }
+      }
+    }
 
   }
 }
