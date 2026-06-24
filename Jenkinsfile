@@ -15,11 +15,12 @@ pipeline {
       }
     }
 
-    stage("clone code") {
-      steps {
-        sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
-      }
-    }
+  stage("clone code") {
+  steps {
+    sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
+    sh "cd Stage-ingenieur && git checkout dev && git pull origin dev"
+  }
+}
 
     stage("Login to Docker Hub") {
       steps {
