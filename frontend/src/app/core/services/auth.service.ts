@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'http://localhost:8081/api/auth';
   private currentUserSubject = new BehaviorSubject<JwtResponse | null>(this.getFromStorage());
   currentUser$ = this.currentUserSubject.asObservable();
 
