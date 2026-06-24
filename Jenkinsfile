@@ -51,11 +51,11 @@ pipeline {
         }
       }
     }
-     stage("docker compose for production") {
+    stage("docker compose for production") {
   steps {
     dir("Stage-ingenieur") {
-      sh "docker compose down -v"
-      sh "docker compose up --detach"
+      sh "docker-compose down -v"
+      sh "docker-compose up -d"
     }
   }
 }
