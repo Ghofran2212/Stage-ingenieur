@@ -1,26 +1,26 @@
+
 pipeline {
   agent any
   tools {
     maven 'maven'
   }
-   environment {
+  environment {
     JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
     PATH = "${JAVA_HOME}/bin:${env.PATH}"
   }
   stages {
-
     stage("clean up") {
       steps {
         deleteDir()
       }
     }
 
-  stage("clone code") {
-  steps {
-    sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
-    sh "cd Stage-ingenieur && git checkout dev && git pull origin dev"
-  }
-}
+    stage("clone code") {
+      steps {
+        sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
+        sh "cd Stage-ingenieur && git checkout dev && git pull origin dev"
+      }
+    }
 
     stage("Login to Docker Hub") {
       steps {
@@ -52,13 +52,14 @@ pipeline {
         }
       }
     }
-   stage("docker compose for production") {
-  steps {
-    dir("Stage-ingenieur") {
-      sh "docker compose down -v --remove-orphans || true"
-      sh "docker compose up -d"
+
+    stage("docker compose for production") {
+      steps {
+        dir("Stage-ingenieur") {
+          sh "docker-compose down -v --remove-orphans || true"
+          sh "docker-compose up -d"
+        }
+      }
     }
-  }
-}
   }
 }
