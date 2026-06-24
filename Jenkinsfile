@@ -49,7 +49,7 @@ pipeline {
     }
       stage("docker compose for production"){
       steps{
-        dir("formation_devops"){
+        dir("Stage-ingenieur"){
           sh "docker compose down --volumes"
           sh "docker compose up -d "
         }
