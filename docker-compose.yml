@@ -1,14 +1,13 @@
 services:
   angular-app:
-    image: angular-app
+    image: ghofranhajjej/angular-app
     container_name: angular
     ports:
       - "4200:80"
     depends_on:
       - spring-app
-
   spring-app:
-    image: spring-app
+    image: ghofranhajjej/spring-app
     container_name: spring
     ports:
       - "8080:8080"
@@ -24,7 +23,6 @@ services:
       mysql:
         condition: service_healthy
     restart: on-failure
-
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -41,6 +39,5 @@ services:
       timeout: 10s
       retries: 10
       start_period: 30s
-
 volumes:
   demo:
