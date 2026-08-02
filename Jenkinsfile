@@ -5,7 +5,7 @@ pipeline {
     maven 'maven'
   }
   environment {
-    JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+    JAVA_HOME = '/opt/java/openjdk'
     PATH = "${JAVA_HOME}/bin:${env.PATH}"
   }
   stages {
@@ -14,14 +14,12 @@ pipeline {
         deleteDir()
       }
     }
-
     stage("clone code") {
       steps {
         sh "git clone https://github.com/Ghofran2212/Stage-ingenieur.git"
         sh "cd Stage-ingenieur && git checkout dev && git pull origin dev"
       }
     }
-
     stage("Login to Docker Hub") {
       steps {
         withCredentials([usernamePassword(
@@ -33,7 +31,6 @@ pipeline {
         }
       }
     }
-
     stage('Build & Push Backend') {
       steps {
         dir('Stage-ingenieur/backend') {
@@ -43,7 +40,6 @@ pipeline {
         }
       }
     }
-
     stage('Build & Push Frontend') {
       steps {
         dir('Stage-ingenieur/frontend') {
@@ -52,12 +48,11 @@ pipeline {
         }
       }
     }
-
-    stage("docker compose for production") {
+    stage("Deploy to Kubernetes") {
       steps {
         dir("Stage-ingenieur") {
-          sh "docker-compose down -v --remove-orphans || true"
-          sh "docker-compose up -d"
+          sh "kubectl apply -f k8s/"
+          sh "kubectl rollout restart deployment -n default"
         }
       }
     }
