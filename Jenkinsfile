@@ -51,7 +51,7 @@ pipeline {
     stage("Deploy to Kubernetes") {
       steps {
         dir("Stage-ingenieur") {
-          sh "kubectl apply -f k8s/"
+          sh "kubectl apply -f K8s/"
           sh "kubectl rollout restart deployment -n default"
         }
       }
