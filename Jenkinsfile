@@ -36,7 +36,9 @@ pipeline {
         dir('Stage-ingenieur/backend') {
           sh 'mvn clean package -DskipTests'
           sh 'docker build -t ghofranhajjej/spring-app .'
-          sh 'docker push ghofranhajjej/spring-app'
+          retry(3) {
+            sh 'docker push ghofranhajjej/spring-app'
+          }
         }
       }
     }
@@ -44,7 +46,9 @@ pipeline {
       steps {
         dir('Stage-ingenieur/frontend') {
           sh 'docker build -t ghofranhajjej/angular-app . --no-cache'
-          sh 'docker push ghofranhajjej/angular-app'
+          retry(3) {
+            sh 'docker push ghofranhajjej/angular-app'
+          }
         }
       }
     }
