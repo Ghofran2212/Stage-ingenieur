@@ -52,13 +52,13 @@ pipeline {
         }
       }
     }
-    stage("Deploy to Kubernetes") {
-      steps {
-        dir("Stage-ingenieur") {
-          sh "kubectl apply -f K8s/"
-          sh "kubectl rollout restart deployment -n default"
-        }
-      }
+   stage("Deploy to Kubernetes") {
+  steps {
+    dir("Stage-ingenieur") {
+      sh "kubectl apply -f deploy-angular.yaml -f deploy-spring.yaml -f mysql-svc.yaml -f mysql.deploy.yaml -f pv.yaml -f pvc.yaml -f angular-svc.yaml"
+      sh "kubectl rollout restart deployment -n default"
     }
+  }
+}
   }
 }
